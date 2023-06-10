@@ -29,7 +29,7 @@ The Python script works as follows:
 - It sends the conversation history to the OpenAI API and receives a response from the GPT-4 model. If an error occurs while sending the message, the error is handled gracefully, and the chat continues.
 - Finally, it prints the model's response (in green) and adds it to the conversation history. 🖨️
 
-It continues this process until the user types 'quit' to exit.
+The code is structured to handle termination signals, save conversation history to a file, and provide a user-friendly interface for interactive chat with the AI assistant.
 
 ## 👩‍💻 Try It Out!
 
