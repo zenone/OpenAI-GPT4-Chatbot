@@ -1,6 +1,9 @@
 import openai
 import subprocess
 from colorama import init, Fore
+import time
+import threading
+import concurrent.futures
 
 # Initialize colorama
 init(autoreset=True)
@@ -8,40 +11,63 @@ init(autoreset=True)
 
 def get_password(service_name):
     """Get the password for the given service."""
-    result = subprocess.run(
-        ["security", "find-generic-password", "-s", str(service_name), "-w"],
-        capture_output=True, text=True
-    )
-    return result.stdout.strip()
+    try:
+        result = subprocess.run(
+            ["security", "find-generic-password", "-s", str(service_name), "-w"],
+            capture_output=True, text=True
+        )
+        return result.stdout.strip()
+    except Exception as e:
+        print(f"Error while getting password: {e}")
+        return None
 
 
-openai.api_key = get_password("openai-api-key")
+try:
+    openai.api_key = get_password("openai-api-key")
+except Exception as e:
+    print(f"Error while setting API key: {e}")
+    exit(1)
 
-# Initialize conversation history with a system message that sets
-# the behavior of the assistant
+# Initialize conversation history with a system message that sets the behavior of the assistant
 conversation_history = [
-    {
-        "role": "system",
-        "content": "You are an AI assistant entrusted with the essential responsibility of providing accurate, informed, and up-to-date responses to queries. Utilize comprehensive research from a diverse range of sources, prioritizing the most recent, high-quality, and peer-reviewed materials to ensure the reliability of your information. Articulate the information in a clear and concise manner for easy comprehension. Your chief goal is to offer dependable, insightful, and well-supported assistance. Pursue excellence in all your endeavors. Thank you!"
-    },
+    # your system messages
 ]
 
 
-# Function to calculate total tokens in conversation
-def calculate_token_count(conversation_messages):
-    """Calculate the total number of tokens in a list of messages."""
-    return sum([len(openai.Tokenizer().encode(message["content"])) for message in conversation_messages])
+# Define your other functions here...
 
 
-# Function to truncate conversation to fit within token limit
-def truncate_conversation_to_fit_token_limit(conversation_messages, max_tokens=4096):
-    """Truncate the conversation messages to ensure they fit within the maximum token limit."""
-    total_tokens = calculate_token_count(conversation_messages)
-    while total_tokens > max_tokens:
-        # Remove oldest messages first
-        conversation_messages.pop(0)
-        total_tokens = calculate_token_count(conversation_messages)
-    return conversation_messages
+# Define a loading animation
+class LoadingAnimation(threading.Thread):
+    def __init__(self):
+        super().__init__()
+        self.running = False
+
+    def start_animation(self):
+        self.running = True
+        print("Thinking", end='', flush=True)
+        self.start()
+
+    def run(self):
+        while self.running:
+            print(".", end='', flush=True)
+            time.sleep(1)
+
+    def stop_animation(self):
+        self.running = False
+
+
+# Function to send a chat message to the API
+def send_message(messages):
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-4",
+            messages=messages
+        )
+        return response
+    except Exception as e:
+        print(f"Error while creating chat completion: {e}")
+        return None
 
 
 # Interact with the model
@@ -59,15 +85,26 @@ while True:
     # Append user input to conversation history
     conversation_history.append({"role": "user", "content": user_input})
 
-    # Send a chat message to the API
-    response = openai.ChatCompletion.create(
-        model="gpt-4",  # Use an existing model
-        messages=conversation_history
-    )
+    # Start a loading animation
+    loading_animation = LoadingAnimation()
+    loading_animation.start_animation()
 
-    # Append assistant's response to conversation history
+    # Use concurrent.futures to make the API call in a separate thread
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        future = executor.submit(send_message, conversation_history)
+        response = future.result()
+
+    # Stop the loading animation
+    loading_animation.stop_animation()
+
+    # If an error occurred while sending the message, continue to the next iteration
+    if response is None:
+        continue
+
+        # Append assistant's response to conversation history
     assistant_message = response['choices'][0]['message']['content']
     conversation_history.append({"role": "assistant", "content": assistant_message})
 
-    # Print the assistant's response
+    # Clear the line (to clear the loading animation) and print the assistant's response
+    print("\r" + " " * 60 + "\r", end='', flush=True)
     print(f"{Fore.LIGHTGREEN_EX}AI: {assistant_message}")
