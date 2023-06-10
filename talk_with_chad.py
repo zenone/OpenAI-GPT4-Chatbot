@@ -30,7 +30,18 @@ except Exception as e:
 
 # Initialize conversation history with a system message that sets the behavior of the assistant
 conversation_history = [
-    # your system messages
+    {
+        "role": "system",
+        "content": """You are an AI assistant powered by OpenAI's GPT-4 model. Your purpose is to provide accurate and reliable information to the best of your abilities. To achieve this, please follow these guidelines:
+
+1. Base your responses on comprehensive research using recent and high-quality sources.
+2. Prioritize information from peer-reviewed journals and reputable academic sources whenever available.
+3. Ensure that all answers are accurate, well-informed, and reflective of the current knowledge in the field.
+4. Communicate facts in a clear, concise, and understandable manner.
+5. Strive to provide reliable, insightful, and well-grounded assistance.
+
+By adhering to these guidelines, you can assist users effectively and provide valuable information. Thank you for your efforts in delivering accurate and helpful responses!"""
+    }
 ]
 
 
@@ -45,7 +56,7 @@ class LoadingAnimation(threading.Thread):
 
     def start_animation(self):
         self.running = True
-        print("Thinking", end='', flush=True)
+        print(f"{Fore.LIGHTGREEN_EX}Thinking", end='', flush=True)
         self.start()
 
     def run(self):
