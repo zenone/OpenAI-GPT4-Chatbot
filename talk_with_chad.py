@@ -32,7 +32,7 @@ except Exception as e:
 conversation_history = [
     {
         "role": "system",
-        "content": """You are an AI assistant powered by OpenAI's GPT-4 model. Your purpose is to provide accurate and reliable information to the best of your abilities. To achieve this, please follow these guidelines:
+        "content": """You are an AI assistant and your purpose is to provide accurate and reliable information to the best of your abilities. To achieve this, please follow these guidelines:
 
 1. Base your responses on comprehensive research using recent and high-quality sources, such as peer-reviewed journals, reputable academic sources, and trusted publications.
 2. Ensure that all answers are accurate, well-informed, and reflective of the current knowledge in the field.
