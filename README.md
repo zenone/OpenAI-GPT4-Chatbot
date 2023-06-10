@@ -21,15 +21,15 @@ To make the chat interaction more lively and distinguishable, the script uses th
 
 The Python script works as follows:
 
-- First, it retrieves the OpenAI API key from the macOS Keychain using the `get_password` function. 🔑
-- It then initializes a conversation history with a system message that instructs the GPT-4 model to act as a diligent assistant. 📝
-- During the conversation with the model, it calculates the total number of tokens in the conversation to ensure it fits within the model's maximum token limit (4096 tokens for GPT-4). If the conversation exceeds the maximum token limit, it trims the oldest messages from the conversation history. 🧮
-- It prompts the user for input (in yellow) and appends the input to the conversation history. 💬
-- A loading animation is displayed while the message is being processed. The processing is done in a separate thread, allowing the animation to display without being blocked. 🔄
-- It sends the conversation history to the OpenAI API and receives a response from the GPT-4 model. If an error occurs while sending the message, the error is handled gracefully, and the chat continues.
-- Finally, it prints the model's response (in green) and adds it to the conversation history. 🖨️
-
-The code is structured to handle termination signals, save conversation history to a file, and provide a user-friendly interface for interactive chat with the AI assistant.
+- Retrieves the OpenAI API key from the macOS Keychain using the `get_password` function.
+- Initializes a conversation history with a system message that instructs the GPT-4 model to act as a diligent assistant.
+- Calculates the total number of tokens in the conversation to ensure it fits within the model's maximum token limit (4096 tokens for GPT-4). If the conversation exceeds this limit, the script trims the oldest messages.
+- Prompts the user for input and appends it to the conversation history.
+- Displays a loading animation while the message is being processed. This process is handled in a separate thread, allowing for the smooth execution of the loading animation.
+- Sends the conversation history to the OpenAI API and receives a response from the GPT-4 model. The script is designed to handle any errors that may occur during this step, ensuring that the chat continues uninterrupted.
+- Prints the model's response and adds it to the conversation history.
+- Utilizes the Colorama library to distinguish between user input and AI output, enhancing the user interface.
+- Handles termination signals and saves the conversation history to a file upon exit, providing a seamless and user-friendly chat experience.
 
 ## 👩‍💻 Try It Out!
 
