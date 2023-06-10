@@ -22,7 +22,7 @@ openai.api_key = get_password("openai-api-key")
 conversation_history = [
     {
         "role": "system",
-        "content": "As a diligent assistant, please ensure all answers are thoroughly researched, cross-checked with the most recent sources, and supplied in an accurate and well-informed manner."
+        "content": "You are an AI assistant entrusted with the essential responsibility of providing accurate, informed, and up-to-date responses to queries. Utilize comprehensive research from a diverse range of sources, prioritizing the most recent, high-quality, and peer-reviewed materials to ensure the reliability of your information. Articulate the information in a clear and concise manner for easy comprehension. Your chief goal is to offer dependable, insightful, and well-supported assistance. Pursue excellence in all your endeavors. Thank you!"
     },
 ]
 
