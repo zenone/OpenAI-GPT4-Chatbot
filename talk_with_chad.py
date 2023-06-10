@@ -1,5 +1,9 @@
 import openai
 import subprocess
+from colorama import init, Fore
+
+# Initialize colorama
+init(autoreset=True)
 
 
 def get_password(service_name):
@@ -11,15 +15,14 @@ def get_password(service_name):
     return result.stdout.strip()
 
 
-openai_api_key = get_password("openai-api-key")
-
+openai.api_key = get_password("openai-api-key")
 
 # Initialize conversation history with a system message that sets
 # the behavior of the assistant
 conversation_history = [
     {
         "role": "system",
-        "content": "You are a helpful assistant."
+        "content": "As a diligent assistant, please ensure all answers are thoroughly researched, cross-checked with the most recent sources, and supplied in an accurate and well-informed manner."
     },
 ]
 
@@ -44,7 +47,7 @@ def truncate_conversation_to_fit_token_limit(conversation_messages, max_tokens=4
 # Interact with the model
 while True:
     # Prompt the user for input
-    user_input = input("You (type 'quit' to exit): ")
+    user_input = input(f"{Fore.LIGHTYELLOW_EX}You (type 'quit' to exit): ")
     if user_input.lower() == "quit":
         break
 
@@ -67,4 +70,4 @@ while True:
     conversation_history.append({"role": "assistant", "content": assistant_message})
 
     # Print the assistant's response
-    print("AI: ", assistant_message)
+    print(f"{Fore.LIGHTGREEN_EX}AI: {assistant_message}")
