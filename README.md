@@ -9,9 +9,9 @@ Whether you're testing, learning, or just having a bit of fun, this script provi
 This chatbot uses your OpenAI API key, which should be kept securely. 🛡️ As I'm using a Mac, I've chosen to use the macOS Keychain to securely store the API key. Here's how I did it:
 
 1. First, open your Terminal. 🖥️
-2. Then, enter this command: `export OPENAI_API_KEY=<openai-api-key>`
+2. Then, enter this command: `security add-generic-password -a $USER -s openai-api-key -w <openai_api_key>`
 
-Make sure to replace `<openai-api-key>` with your actual OpenAI API key. This command stores your OpenAI API key in the macOS Keychain.
+Make sure to replace `<openai_api_key>` with your actual OpenAI API key. This command securely stores your OpenAI API key in the macOS Keychain.
 
 ## 🌈 Colorful Interactions
 
