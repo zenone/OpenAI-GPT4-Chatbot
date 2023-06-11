@@ -159,7 +159,7 @@ while True:
 
     # Clear the line (to clear the loading animation) and print the assistant's response
     print("\r" + " " * 60 + "\r", end='', flush=True)
-    print(f"{Fore.LIGHTGREEN_EX}AI: {assistant_message}")
+    print(f"\n{Fore.LIGHTGREEN_EX}AI: {assistant_message}\n")
     print()
 
 # The user has typed 'quit', so now we exit the loop and write the conversation history to the file
